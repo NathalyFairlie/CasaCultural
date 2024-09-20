@@ -1,0 +1,8 @@
+Atividade1\CasaCultural\model\Analise.class
+Atividade1\CasaCultural\exception\ErrorHandler.class
+Atividade1\CasaCultural\model\Filme.class
+Atividade1\CasaCultural\repository\AnaliseRepository.class
+Atividade1\CasaCultural\CasaCulturalApplication.class
+Atividade1\CasaCultural\controller\FilmeController.class
+Atividade1\CasaCultural\controller\FilmeRestController.class
+Atividade1\CasaCultural\repository\FilmeRepository.class

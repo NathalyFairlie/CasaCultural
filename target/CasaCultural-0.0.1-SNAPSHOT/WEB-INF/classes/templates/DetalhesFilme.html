@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalhes do Filme</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="/js/scripts.js"></script> 
+</head>
+<body>
+    <header th:insert="navbar.html"></header>
+
+    <div class="container">
+        <h1 th:text="${filme.titulo}"></h1>
+
+        <p><strong>Sinopse:</strong> <span th:text="${filme.sinopse}"></span></p>
+        <p><strong>Gênero:</strong> <span th:text="${filme.genero}"></span></p>
+        <p><strong>Ano de Lançamento:</strong> <span th:text="${filme.anoLancamento}"></span></p>
+
+        <h2>Análises</h2>
+        <div th:if="${not #lists.isEmpty(analises)}">
+            <ul id="lista-analises">
+                <li th:each="analise : ${analises}" th:id="'analise-' + ${analise.id}">
+                    <p><strong>Nota:</strong> <span th:text="${analise.nota}"></span></p>
+                    <p><strong>Comentário:</strong> <span th:text="${analise.comentario}"></span></p>
+                </li>
+            </ul>
+        </div>
+        <div th:unless="${not #lists.isEmpty(analises)}">
+            <p>Ainda não há análises para este filme.</p>
+        </div>
+
+        <h2>Adicionar Análise</h2>
+        <form th:action="@{/filmes/{id}/analises(id=${filme.id})}" method="post" th:object="${novaAnalise}">
+            <div>
+                <label for="nota">Nota (1-5):</label>
+                <input type="number" id="nota" th:field="*{nota}" min="1" max="5" required/>
+                <span th:if="${#fields.hasErrors('nota')}" th:errors="*{nota}"></span>
+            </div>
+            <div>
+                <label for="comentario">Comentário:</label>
+                <textarea id="comentario" th:field="*{comentario}" required></textarea>
+                <span th:if="${#fields.hasErrors('comentario')}" th:errors="*{comentario}"></span>
+            </div>
+            <button type="submit">Enviar Análise</button>
+        </form>
+
+        <a th:href="@{/filmes}" class="btn btn-secondary">Voltar à lista de filmes</a>
+    </div>
+</body>
+</html>

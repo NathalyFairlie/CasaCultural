@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Lista de Filmes</title>
+        <link rel="stylesheet" href="/css/style.css"/>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="/js/scripts.js"></script> <!-- Certifique-se de ter o ficheiro de scripts -->
+    </head>
+    <body>
+        <header th:insert="navbar.html"></header>
+
+        <h1>Lista de Filmes</h1>
+
+        <table id="tabelaFilmes">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Sinopse</th>
+                    <th>Gênero</th>
+                    <th>Ano de Lançamento</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Cada filme da lista -->
+                <tr th:each="filme : ${filmes}" th:id="'filme-' + ${filme.id}">
+                    <td th:text="${filme.titulo}"></td>
+                    <td th:text="${filme.sinopse}"></td>
+                    <td th:text="${filme.genero}"></td>
+                    <td th:text="${filme.anoLancamento}"></td>
+                    <td>
+                        <a th:href="@{/filmes/{id}(id=${filme.id})}">Detalhes</a> |
+                        <a th:href="@{/filmes/editar/{id}(id=${filme.id})}">Editar</a> |
+                        <a href="#" class="deletar-filme" th:data-filme-id="${filme.id}">Deletar</a> <!-- Correção feita aqui -->
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <script>
+            $(document).ready(function () {
+
+                // Função para obter o token CSRF do cabeçalho
+                function getCsrfToken() {
+                    var csrfToken = null;
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = cookies[i].trim();
+                        if (cookie.startsWith('X-CSRF-TOKEN=')) {
+                            csrfToken = decodeURIComponent(cookie.substring('X-CSRF-TOKEN='.length, cookie.length));
+                            break;
+                        }
+                    }
+                    return csrfToken;
+                }
+
+                // Adicionar evento de clique ao botão de deletar
+                $('#tabelaFilmes').on('click', '.deletar-filme', function (event) {
+                    event.preventDefault();
+                    var filmeId = $(this).data('filme-id'); // ID do filme a ser deletado
+                    var csrfToken = getCsrfToken(); // Obtém o token CSRF
+
+                    if (confirm('Tem certeza de que deseja deletar este filme?')) {
+                        $.ajax({
+                            url: `/api/filmes/${filmeId}`, // URL corrigida para usar o filmeId corretamente
+                            type: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': csrfToken // Adiciona o token CSRF nos headers
+                            },
+                            success: function () {
+                                // Remove a linha correspondente ao filme deletado
+                                $('#filme-' + filmeId).remove();
+                                alert('Filme deletado com sucesso!'); // Mensagem de sucesso
+                            },
+                            error: function (error) {
+                                alert('Erro ao deletar o filme. Detalhes: ' + error.responseText); // Exibe o erro
+                                console.error("Erro na requisição AJAX:", error); // Log do erro no console
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
