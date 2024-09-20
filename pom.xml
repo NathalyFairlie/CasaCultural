@@ -14,7 +14,7 @@
     <groupId>Atividade1</groupId>
     <artifactId>CasaCultural</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging> <!-- Alterado para gerar arquivo WAR -->
+    <packaging>jar</packaging> <!-- Alterado para gerar arquivo WAR -->
     <name>CasaCultural</name>
     <description>Atividade 1</description>
 
