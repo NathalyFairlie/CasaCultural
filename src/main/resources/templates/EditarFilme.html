@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Filme</title>
+    <link rel="stylesheet" href="/css/style.css"/>
+</head>
+<body>
+    <header th:insert="navbar.html"></header>
+    <div class="container">
+        <h1>Editar Filme</h1>
+
+        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+        <form id="editarFilmeForm" th:action="@{/filmes/editar/{id}(id=${filme.id})}" method="post" th:object="${filme}">
+            <input type="hidden" th:field="*{id}"/> 
+
+            <div class="form-group">
+                <label for="titulo">Título:</label>
+                <input type="text" id="titulo" th:field="*{titulo}" required class="form-control"/>
+                <p th:if="${#fields.hasErrors('titulo')}" th:errors="*{titulo}" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="sinopse">Sinopse:</label>
+                <textarea id="sinopse" th:field="*{sinopse}" required class="form-control"></textarea>
+                <p th:if="${#fields.hasErrors('sinopse')}" th:errors="*{sinopse}" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="genero">Gênero:</label>
+                <input type="text" id="genero" th:field="*{genero}" required class="form-control"/>
+                <p th:if="${#fields.hasErrors('genero')}" th:errors="*{genero}" class="error-message"></p>
+            </div>
+
+            <div class="form-group">
+                <label for="anoLancamento">Ano de Lançamento:</label>
+                <input type="number" id="anoLancamento" th:field="*{anoLancamento}" required class="form-control"/>
+                <p th:if="${#fields.hasErrors('anoLancamento')}" th:errors="*{anoLancamento}" class="error-message"></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+        </form>
+
+        <a th:href="@{/filmes}" class="btn btn-secondary">Voltar à lista de filmes</a>
+    </div>
+</body>
+</html>
